@@ -20,6 +20,11 @@ const workItems = computed(() => [
   {
     id: "5",
     title: "Assets",
+    images: [
+      {
+        src: "/portfolio/assets/group.png",
+      },
+    ],
   },
 ]);
 </script>
@@ -79,20 +84,22 @@ const workItems = computed(() => [
             <section v-for="item in workItems" class="workItem">
               <div class="workItemInner">
                 <h3>{{ item.title }}</h3>
-                <CCarousel
-                  :items-to-show="1.1"
-                  :wrap-around="true"
-                  :items-to-scroll="1"
-                  :snap-align="'start'"
-                >
-                  <CSlide v-for="slide in 10" :key="slide">
-                    <div class="carousel__item">{{ slide }}</div>
-                  </CSlide>
+                <div :class="item.images?.length === 1 ? 'oneItemWrapper' : ''">
+                  <CCarousel
+                    :items-to-show="1.1"
+                    :wrap-around="item.images?.length > 1"
+                    :items-to-scroll="1"
+                    :snap-align="'start'"
+                  >
+                    <CSlide v-for="slide in item.images" :key="slide">
+                      <div class="carousel__item"><img :src="slide.src" /></div>
+                    </CSlide>
 
-                  <template #addons>
-                    <CNavigation />
-                  </template>
-                </CCarousel>
+                    <template #addons>
+                      <CNavigation />
+                    </template>
+                  </CCarousel>
+                </div>
               </div>
             </section>
             <!-- workItem -->
@@ -119,20 +126,22 @@ const workItems = computed(() => [
             <section id="testimonials" class="testimonials">
               <div class="testimonialsInner">
                 <h4>Testimonials</h4>
-                <CCarousel
-                  :items-to-show="1.5"
-                  :wrap-around="true"
-                  :items-to-scroll="1"
-                  :snap-align="'start'"
-                >
-                  <CSlide v-for="slide in 3" :key="slide">
-                    <div class="carousel__item">{{ slide }}</div>
-                  </CSlide>
+                <div class="testimonialsContainer">
+                  <CCarousel
+                    :items-to-show="1"
+                    :wrap-around="true"
+                    :items-to-scroll="1"
+                    :snap-align="'start'"
+                  >
+                    <CSlide v-for="slide in 3" :key="slide">
+                      <div class="carousel__item">{{ slide }}</div>
+                    </CSlide>
 
-                  <template #addons>
-                    <CNavigation />
-                  </template>
-                </CCarousel>
+                    <template #addons>
+                      <CNavigation />
+                    </template>
+                  </CCarousel>
+                </div>
               </div>
             </section>
             <!-- testimonials -->
@@ -283,14 +292,23 @@ main {
       padding-right: 150px;
     }
     .carousel__item {
-      background-color: gray;
       width: 100%;
       aspect-ratio: 16/9;
+    }
+
+    .oneItemWrapper {
+      .carousel {
+        .carousel__next {
+          display: none;
+        }
+      }
     }
   }
 }
 
 .ourTeam {
+  margin-bottom: 50px;
+
   .ourTeamInner {
     width: 100%;
 
@@ -312,6 +330,38 @@ main {
       background-color: gray;
       width: 100%;
       aspect-ratio: 5/8;
+    }
+  }
+}
+
+.testimonials {
+  margin-bottom: 50px;
+
+  .testimonialsInner {
+    width: 100%;
+
+    .testimonialsContainer {
+      width: 800px;
+    }
+
+    .carousel {
+      width: 100%;
+
+      // .carousel__prev {
+      //   display: none;
+      // }
+      // .carousel__next {
+      //   right: 13%;
+      // }
+    }
+
+    // .carousel__slide {
+    //   padding-right: 75px;
+    // }
+    .carousel__item {
+      background-color: gray;
+      width: 100%;
+      aspect-ratio: 16/7;
     }
   }
 }
