@@ -4,22 +4,47 @@ const workItems = computed(() => [
   {
     id: "1",
     title: "SunShot",
+    description: `Easily and quickly create beautiful screen recordings that follow your mouse.`,
+    images: [
+      {
+        src: "/portfolio/sunshot/sunshot.png",
+      },
+    ],
   },
   {
     id: "2",
     title: "DeepType",
+    description: "Harness AI suggestions and summaries to write better.",
+    images: [
+      {
+        src: "/portfolio/deeptype/suggestions.png",
+      },
+    ],
   },
   {
     id: "3",
     title: "CommonPlace",
+    description: "Share your hobbies and get feedback from others.",
+    images: [
+      {
+        src: "/portfolio/commonplace/main.jpg",
+      },
+    ],
   },
   {
     id: "4",
     title: "AdMesh",
+    description: "Create 3D content such as ads and banners for AR revolution.",
+    images: [
+      {
+        src: "/portfolio/admesh/admesh.webp",
+      },
+    ],
   },
   {
     id: "5",
     title: "Assets",
+    description: "Share and rank design assets in a collaborative space.",
     images: [
       {
         src: "/portfolio/assets/group.png",
@@ -84,6 +109,7 @@ const workItems = computed(() => [
             <section v-for="item in workItems" class="workItem">
               <div class="workItemInner">
                 <h3>{{ item.title }}</h3>
+                <p>{{ item.description }}</p>
                 <div :class="item.images?.length === 1 ? 'oneItemWrapper' : ''">
                   <CCarousel
                     :items-to-show="1.1"
@@ -164,7 +190,7 @@ const workItems = computed(() => [
 body {
   width: 100vw;
   overflow-x: hidden;
-  background-color: beige;
+  background-color: white;
   color: #333;
 }
 
