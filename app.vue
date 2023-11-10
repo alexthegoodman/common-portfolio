@@ -5,6 +5,7 @@ const workItems = computed(() => [
     id: "1",
     title: "SunShot",
     description: `Easily and quickly create beautiful screen recordings that follow your mouse.`,
+    link: "https://github.com/alexthegoodman/sunshot",
     images: [
       {
         src: "/portfolio/sunshot/sunshot.png",
@@ -15,6 +16,7 @@ const workItems = computed(() => [
     id: "2",
     title: "DeepType",
     description: "Harness AI suggestions and summaries to write better.",
+    link: "https://github.com/alexthegoodman/deeptype",
     images: [
       {
         src: "/portfolio/deeptype/suggestions.png",
@@ -25,6 +27,7 @@ const workItems = computed(() => [
     id: "3",
     title: "CommonPlace",
     description: "Share your hobbies and get feedback from others.",
+    link: "https://github.com/alexthegoodman/commonplace",
     images: [
       {
         src: "/portfolio/commonplace/main.jpg",
@@ -35,6 +38,7 @@ const workItems = computed(() => [
     id: "4",
     title: "AdMesh",
     description: "Create 3D content such as ads and banners for AR revolution.",
+    link: "https://github.com/alexthegoodman/admesh",
     images: [
       {
         src: "/portfolio/admesh/admesh.webp",
@@ -45,6 +49,7 @@ const workItems = computed(() => [
     id: "5",
     title: "Assets",
     description: "Share and rank design assets in a collaborative space.",
+    link: "https://github.com/alexthegoodman/AssetsTV",
     images: [
       {
         src: "/portfolio/assets/group.png",
@@ -101,6 +106,35 @@ const testimonialItems = computed(() => [
     the business. We’ll hire Alex again and you should too.`,
   },
 ]);
+
+// set vars when scrolling into sections
+const setVars = () => {
+  const sections = document.querySelectorAll("section");
+  sections.forEach((section) => {
+    const id = section.id;
+
+    if (!id) return;
+
+    const top = section.offsetTop;
+    const height = section.clientHeight;
+
+    if (
+      window.pageYOffset > top - 50 &&
+      window.pageYOffset < top + height - 50
+    ) {
+      console.info("scroll", id, top, height);
+
+      document.querySelector(`nav ul li #${id}Link`).classList.add("active");
+    } else {
+      document.querySelector(`nav ul li #${id}Link`).classList.remove("active");
+    }
+  });
+};
+
+// detect scroll and set vars in ssr
+if (process.client) {
+  window.addEventListener("scroll", setVars);
+}
 </script>
 
 <template>
@@ -111,29 +145,44 @@ const testimonialItems = computed(() => [
           <nav>
             <ul>
               <li>
-                <ULink :to="{ path: '/', hash: '#welcome' }">Welcome</ULink>
+                <ULink id="welcomeLink" :to="{ path: '/', hash: '#welcome' }"
+                  >Welcome</ULink
+                >
               </li>
               <li>
-                <ULink :to="{ path: '/', hash: '#ourWork' }">Our Work</ULink>
+                <ULink id="ourWorkLink" :to="{ path: '/', hash: '#ourWork' }"
+                  >Our Work</ULink
+                >
               </li>
               <li>
-                <ULink :to="{ path: '/', hash: '#ourTeam' }">Our Team</ULink>
+                <ULink id="ourTeamLink" :to="{ path: '/', hash: '#ourTeam' }"
+                  >Our Team</ULink
+                >
               </li>
               <li>
-                <ULink :to="{ path: '/', hash: '#testimonials' }"
+                <ULink
+                  id="testimonialsLink"
+                  :to="{ path: '/', hash: '#testimonials' }"
                   >Testimonials</ULink
                 >
               </li>
               <li>
-                <ULink :to="{ path: '/', hash: '#aboutUs' }">About Us</ULink>
+                <ULink id="aboutUsLink" :to="{ path: '/', hash: '#aboutUs' }"
+                  >About Us</ULink
+                >
               </li>
               <li>
-                <ULink :to="{ path: '/', hash: '#contactUs' }"
+                <ULink
+                  id="contactUsLink"
+                  :to="{ path: '/', hash: '#contactUs' }"
                   >Contact Us</ULink
                 >
               </li>
             </ul>
           </nav>
+          <span class="copyright"
+            >&copy; Copyright {{ new Date().getFullYear() }} Common</span
+          >
         </aside>
       </div>
     </section>
@@ -163,35 +212,44 @@ const testimonialItems = computed(() => [
               </div>
             </section>
             <!-- hero -->
-            <section id="ourWork" class="workIntro">
-              <div class="workIntroInner">
-                <h2>Our Work</h2>
-                <p>
-                  These are open source projects that are not under any NDA.
-                </p>
-              </div>
-            </section>
-            <section v-for="item in workItems" class="workItem">
-              <div class="workItemInner">
-                <h3>{{ item.title }}</h3>
-                <p>{{ item.description }}</p>
-                <div :class="item.images?.length === 1 ? 'oneItemWrapper' : ''">
-                  <CCarousel
-                    :items-to-show="1.1"
-                    :wrap-around="item.images?.length > 1"
-                    :items-to-scroll="1"
-                    :snap-align="'start'"
-                  >
-                    <CSlide v-for="slide in item.images" :key="slide">
-                      <div class="carousel__item"><img :src="slide.src" /></div>
-                    </CSlide>
-
-                    <template #addons>
-                      <CNavigation />
-                    </template>
-                  </CCarousel>
+            <section id="ourWork">
+              <section class="workIntro">
+                <div class="workIntroInner">
+                  <h2>Our Work</h2>
+                  <p>
+                    These are open source projects that are not under any NDA.
+                  </p>
                 </div>
-              </div>
+              </section>
+              <section v-for="item in workItems" class="workItem">
+                <div class="workItemInner">
+                  <h3>{{ item.title }}</h3>
+                  <p>{{ item.description }}</p>
+                  <div
+                    :class="item.images?.length === 1 ? 'oneItemWrapper' : ''"
+                  >
+                    <CCarousel
+                      :items-to-show="1.1"
+                      :wrap-around="item.images?.length > 1"
+                      :items-to-scroll="1"
+                      :snap-align="'start'"
+                    >
+                      <CSlide v-for="slide in item.images" :key="slide">
+                        <div class="carousel__item">
+                          <img :src="slide.src" />
+                        </div>
+                      </CSlide>
+
+                      <template #addons>
+                        <CNavigation />
+                      </template>
+                    </CCarousel>
+                  </div>
+                  <a :href="item.link" target="_blank" class="btn"
+                    >View Project <UIcon name="i-heroicons-arrow-right"
+                  /></a>
+                </div>
+              </section>
             </section>
             <!-- workItem -->
             <section id="ourTeam" class="ourTeam">
@@ -238,9 +296,9 @@ const testimonialItems = computed(() => [
                     <CSlide v-for="slide in testimonialItems" :key="slide">
                       <div class="carousel__item">
                         <div class="carousel__itemContent">
-                          <h5>{{ slide.name }}</h5>
-                          <p>{{ slide.title }}</p>
                           <p>{{ slide.quote }}</p>
+                          <h5>{{ slide.name }}</h5>
+                          <span>{{ slide.title }}</span>
                         </div>
                       </div>
                     </CSlide>
@@ -269,11 +327,31 @@ const testimonialItems = computed(() => [
 </template>
 
 <style lang="scss">
+$lightBlue: #dfe5f3;
+$greenBlue: #557373;
+$greenBlack: #272401;
+$nearWhite: #f2efea;
+$nearBlack: #0d0d0d;
+
+.btn {
+  display: block;
+  min-width: 175px;
+  width: fit-content;
+  padding: 8px 16px;
+  background-color: $greenBlue;
+  color: white;
+  text-decoration: none;
+  font-size: 18px;
+  cursor: pointer;
+  margin-top: 20px;
+  text-align: center;
+}
+
 body {
   width: 100vw;
   overflow-x: hidden;
-  background-color: white;
-  color: #333;
+  background-color: $lightBlue;
+  color: $nearBlack;
 }
 
 main {
@@ -298,6 +376,15 @@ main {
   }
 }
 
+@keyframes animateBorder {
+  0% {
+    width: 0;
+  }
+  100% {
+    width: 100%;
+  }
+}
+
 .sidebar {
   padding: 50px 0;
 
@@ -311,12 +398,38 @@ main {
 
         a {
           display: block;
-          padding: 8px 16px;
+          padding: 8px 0;
           font-size: 28px;
           cursor: pointer;
+          width: fit-content;
+
+          position: relative;
+
+          &:after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background-color: $greenBlue;
+            animation: animateBorder 0.5s ease forwards;
+            display: none;
+          }
+
+          &.active {
+            &:after {
+              animation: animateBorder 0.5s ease forwards;
+              display: block;
+            }
+          }
         }
       }
     }
+  }
+  .copyright {
+    font-size: 12px;
+    color: $greenBlack;
   }
 }
 
@@ -336,6 +449,8 @@ main {
 
       .contentInner {
         width: 100%;
+        position: relative;
+        z-index: 20;
       }
     }
   }
@@ -384,7 +499,7 @@ main {
 
     h3 {
       font-size: 32px;
-      margin-bottom: 20px;
+      margin-bottom: 10px;
     }
     p {
       margin-bottom: 20px;
@@ -407,6 +522,9 @@ main {
     .carousel__item {
       width: 100%;
       aspect-ratio: 16/9;
+
+      background-color: white;
+      border: 7px solid $greenBlue;
     }
 
     .oneItemWrapper {
@@ -464,6 +582,11 @@ main {
 .testimonials {
   margin-bottom: 50px;
 
+  h4 {
+    font-size: 32px;
+    margin-bottom: 20px;
+  }
+
   .testimonialsInner {
     width: 100%;
 
@@ -486,9 +609,24 @@ main {
     //   padding-right: 75px;
     // }
     .carousel__item {
-      background-color: gray;
+      background-color: $greenBlue;
       width: 100%;
       aspect-ratio: 16/7;
+
+      .carousel__itemContent {
+        display: flex;
+        width: 80%;
+        height: 100%;
+        margin: 0 auto;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        color: $nearWhite;
+
+        p {
+          margin-bottom: 12px;
+        }
+      }
     }
   }
 }
