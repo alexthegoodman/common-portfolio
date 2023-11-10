@@ -52,6 +52,55 @@ const workItems = computed(() => [
     ],
   },
 ]);
+
+const teamItems = computed(() => [
+  {
+    id: "1",
+    name: "Alex Goodman",
+    title: "Developer, Manager",
+    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    image: "/team/alex.jpg",
+  },
+  {
+    id: "2",
+    name: "Jane Doe",
+    title: "Developer",
+    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    image: "/team/jane.jpg",
+  },
+  {
+    id: "3",
+    name: "John Doe",
+    title: "Designer",
+    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    image: "/team/john.jpg",
+  },
+]);
+
+const testimonialItems = computed(() => [
+  {
+    id: "1",
+    name: "Daniel Reiling",
+    title: "Partner, Ecordia",
+    quote: `Alex is phenomenal to work with! Very easygoing, highly intelligent, and very process-focused. 
+    He is an exceptional React developer, with strong database skills, and we enjoyed working with him. 
+    HIGHLY RECOMMEND for development!!!`,
+  },
+  {
+    id: "2",
+    name: "Dillon Doherty",
+    title: "Founder, Alleo AI",
+    quote: "Alex does great work and is very communicative.",
+  },
+  {
+    id: "3",
+    name: "Aniket Tiwari",
+    title: "Partner, Testizen",
+    quote: `Alex is a great guy to work with in the sense that we never had any issues we typically 
+    see with freelancers. Great solid work ethic, flexible to the needs of a startup and curious about 
+    the business. We’ll hire Alex again and you should too.`,
+  },
+]);
 </script>
 
 <template>
@@ -61,12 +110,28 @@ const workItems = computed(() => [
         <aside class="sidebar">
           <nav>
             <ul>
-              <li><ULink to="#welcome">Welcome</ULink></li>
-              <li><ULink to="#ourWork">Our Work</ULink></li>
-              <li><ULink to="#ourTeam">Our Team</ULink></li>
-              <li><ULink to="#testimonials">Testimonials</ULink></li>
-              <li><ULink to="#aboutUs">About Us</ULink></li>
-              <li><ULink to="#contactUs">Contact Us</ULink></li>
+              <li>
+                <ULink :to="{ path: '/', hash: '#welcome' }">Welcome</ULink>
+              </li>
+              <li>
+                <ULink :to="{ path: '/', hash: '#ourWork' }">Our Work</ULink>
+              </li>
+              <li>
+                <ULink :to="{ path: '/', hash: '#ourTeam' }">Our Team</ULink>
+              </li>
+              <li>
+                <ULink :to="{ path: '/', hash: '#testimonials' }"
+                  >Testimonials</ULink
+                >
+              </li>
+              <li>
+                <ULink :to="{ path: '/', hash: '#aboutUs' }">About Us</ULink>
+              </li>
+              <li>
+                <ULink :to="{ path: '/', hash: '#contactUs' }"
+                  >Contact Us</ULink
+                >
+              </li>
             </ul>
           </nav>
         </aside>
@@ -138,8 +203,18 @@ const workItems = computed(() => [
                   :items-to-scroll="1"
                   :snap-align="'start'"
                 >
-                  <CSlide v-for="slide in 3" :key="slide">
-                    <div class="carousel__item">{{ slide }}</div>
+                  <CSlide v-for="slide in teamItems" :key="slide">
+                    <div class="carousel__item">
+                      <div
+                        class="carousel__itemImage"
+                        :style="{ backgroundImage: `url(${slide.image})` }"
+                      ></div>
+                      <div class="carousel__itemContent">
+                        <h5>{{ slide.name }}</h5>
+                        <p>{{ slide.title }}</p>
+                        <p>{{ slide.description }}</p>
+                      </div>
+                    </div>
                   </CSlide>
 
                   <template #addons>
@@ -158,9 +233,16 @@ const workItems = computed(() => [
                     :wrap-around="true"
                     :items-to-scroll="1"
                     :snap-align="'start'"
+                    :autoplay="10000"
                   >
-                    <CSlide v-for="slide in 3" :key="slide">
-                      <div class="carousel__item">{{ slide }}</div>
+                    <CSlide v-for="slide in testimonialItems" :key="slide">
+                      <div class="carousel__item">
+                        <div class="carousel__itemContent">
+                          <h5>{{ slide.name }}</h5>
+                          <p>{{ slide.title }}</p>
+                          <p>{{ slide.quote }}</p>
+                        </div>
+                      </div>
                     </CSlide>
 
                     <template #addons>
@@ -203,6 +285,7 @@ main {
   left: 0;
   width: 100vw;
   height: 100vh;
+  z-index: 10;
 
   .containerInner {
     margin: 0 auto;
@@ -230,6 +313,7 @@ main {
           display: block;
           padding: 8px 16px;
           font-size: 28px;
+          cursor: pointer;
         }
       }
     }
@@ -302,6 +386,9 @@ main {
       font-size: 32px;
       margin-bottom: 20px;
     }
+    p {
+      margin-bottom: 20px;
+    }
 
     .carousel {
       width: 100%;
@@ -338,6 +425,11 @@ main {
   .ourTeamInner {
     width: 100%;
 
+    h4 {
+      font-size: 32px;
+      margin-bottom: 20px;
+    }
+
     .carousel {
       width: 100%;
 
@@ -345,7 +437,8 @@ main {
         display: none;
       }
       .carousel__next {
-        right: 13%;
+        // right: 13%;
+        display: none;
       }
     }
 
@@ -353,9 +446,17 @@ main {
       padding-right: 75px;
     }
     .carousel__item {
-      background-color: gray;
       width: 100%;
-      aspect-ratio: 5/8;
+
+      .carousel__itemImage {
+        width: 100%;
+        height: 100%;
+        background-color: lightgrey;
+        background-position: center;
+        background-size: cover;
+        background-repeat: no-repeat;
+        aspect-ratio: 5/8;
+      }
     }
   }
 }

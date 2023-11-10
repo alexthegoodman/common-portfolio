@@ -5,4 +5,5 @@ export default defineNuxtConfig({
   carousel: {
     prefix: "C",
   },
+  // plugins: [{ src: "~/plugins/router.scrollBehavior.ts", mode: "client" }],
 });
